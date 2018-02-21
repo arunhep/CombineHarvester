@@ -47,12 +47,12 @@ else :
     with open(args.file) as jsonfile:
         data = json.load(jsonfile)
     if not args.expected_only:
-        graph_obs         = plot.LimitTGraphFromJSON(data, 'observed')
-    graph_minus2sigma = plot.LimitTGraphFromJSON(data, '-2')
-    graph_minus1sigma = plot.LimitTGraphFromJSON(data, '-1')
-    graph_exp         = plot.LimitTGraphFromJSON(data, 'expected')
-    graph_plus1sigma  = plot.LimitTGraphFromJSON(data, '+1')
-    graph_plus2sigma  = plot.LimitTGraphFromJSON(data, '+2')
+        graph_obs         = plot.LimitTGraphFromJSON(data, 'obs')
+    graph_minus2sigma = plot.LimitTGraphFromJSON(data, 'exp-2')
+    graph_minus1sigma = plot.LimitTGraphFromJSON(data, 'exp-1')
+    graph_exp         = plot.LimitTGraphFromJSON(data, 'exp0')
+    graph_plus1sigma  = plot.LimitTGraphFromJSON(data, 'exp+1')
+    graph_plus2sigma  = plot.LimitTGraphFromJSON(data, 'exp+2')
     maketable.TablefromJson(args.file, "mssm_limit_table.txt")
 
 process_label=args.process
@@ -147,6 +147,6 @@ legend.Draw("same")
 plot.DrawCMSLogo(pads[1], '', '', 11, 0.045, 0.035, 1.2)
 plot.DrawTitle(pads[1], '%s'%args.title, 3);
 plot.FixOverlay()
-c1.SaveAs("%s.pdf"%args.outname)
+#c1.SaveAs("%s.pdf"%args.outname)
 c1.SaveAs("%s.png"%args.outname)
     

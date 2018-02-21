@@ -18,12 +18,22 @@ class THDMHiggsModel(PhysicsModel):
             'br_Hhh'        : 'br_Hhh',
             'br_AZh'        : 'br_AZh'
         }
+        self.h_dict[1] = {
+            'mA'  : 'm_A',
+            'mH'  : 'm_H',
+            'mh'  : 'm_h',
+            'mHp' : 'm_Hp',
+            'br_HWW'        : 'br_H_WW',
+        }
         for X in ['h', 'H', 'A']:
             self.h_dict[0].update({
                 'xs_gg%s'%X     : 'xs_gg_%s'%X,
                 'xs_bb%s'%X     : 'xs_bb_%s'%X,
                 'br_%stautau'%X : 'br_%stautau'%X,
                 'br_%sbb'%X     : 'br_%sbb'%X,
+                })
+            self.h_dict[1].update({
+                'xs_gg%s'%X     : 'xs_gg_%s'%X
                 })
         # Define the known production and decay processes
         # These are strings we will look for in the process names to
@@ -102,9 +112,9 @@ class THDMHiggsModel(PhysicsModel):
         # It's best not to set ranges for the model parameters here.
         # RooFit will create them automatically from the x- and y-axis
         # ranges of the input histograms
-        mH = ROOT.RooRealVar('mH', 'mH', 300.)
-        tanb = ROOT.RooRealVar('tanb', 'tanb', 10.)
-        pars = [mH, tanb]
+        cba = ROOT.RooRealVar('cba', 'cos(#beta-#alpha)', 1.)
+        tanb = ROOT.RooRealVar('tanb', 'tan#beta', 10.)
+        pars = [cba, tanb]
         doneMasses = False
 
         for era, (file, version) in self.modelFiles.iteritems():
@@ -115,27 +125,29 @@ class THDMHiggsModel(PhysicsModel):
             # assumption that they are the same in all model files
             if not doneMasses:
                 self.doHistFunc('mA', f.Get(hd['mA']), pars)
+                self.doHistFunc('mH', f.Get(hd['mH']), pars)
                 self.doHistFunc('mh', f.Get(hd['mh']), pars)
                 doneMasses = True
 
             # Do the xsecs and BRs for the three neutral Higgs bosons
-            for X in ['h', 'H', 'A']:
+            for X in ['H']:#['h', 'H', 'A']:
                 self.doHistFunc('xs_gg%s_%s' % (X, era), f.Get(hd['xs_gg%s'%X]), pars)
                 # Build the Santander-matched bbX cross section. The matching depends
                 # on the mass of the Higgs boson in question, so for the h and A we
                 # pass the mh or mA TH2 as an additional argument
-                self.doHistFunc('xs_bb%s_%s' % (X, era), f.Get(hd['xs_bb%s'%X]), pars)
-                self.doHistFunc('br_%stautau_%s' % (X, era), f.Get(hd['br_%stautau'%X]), pars)
-                self.doHistFunc('br_%sbb_%s' % (X, era), f.Get(hd['br_%sbb'%X]), pars)
+                #self.doHistFunc('xs_bb%s_%s' % (X, era), f.Get(hd['xs_bb%s'%X]), pars)
+                #self.doHistFunc('br_%stautau_%s' % (X, era), f.Get(hd['br_%stautau'%X]), pars)
+                #self.doHistFunc('br_%sbb_%s' % (X, era), f.Get(hd['br_%sbb'%X]), pars)
+                self.doHistFunc('br_%sWW_%s' % (X, era), f.Get(hd['br_%sWW'%X]), pars)
                 # Make a note of what we've built, will be used to create scaling expressions later
-                self.PROC_SETS.append(([ 'gg%s'%X, 'bb%s'%X ], [ '%stautau'%X, '%sbb'%X], [era])
+                self.PROC_SETS.append(([ 'gg%s'%X], [ '%sWW'%X], [era])#(([ 'gg%s'%X, 'bb%s'%X ], [ '%stautau'%X, '%sbb'%X], [era])
             )
             # And the extra term we need for H->hh
-            self.doHistFunc('br_Hhh_%s'%era, f.Get(hd['br_Hhh']), pars)
-            self.PROC_SETS.append((['ggH'], ['Hhhbbtautau'], [era]))
+            #self.doHistFunc('br_Hhh_%s'%era, f.Get(hd['br_Hhh']), pars)
+            #self.PROC_SETS.append((['ggH'], ['Hhhbbtautau'], [era]))
             # And the extra term we need for A->Zh
-            self.doHistFunc('br_AZh_%s'%era, f.Get(hd['br_AZh']), pars)
-            self.PROC_SETS.append((['ggA'], ['AZhLLtautau'], [era]))
+            #self.doHistFunc('br_AZh_%s'%era, f.Get(hd['br_AZh']), pars)
+            #self.PROC_SETS.append((['ggA'], ['AZhLLtautau'], [era]))
             # And the SM terms
             for X in ['ggH', 'qqH', 'VH']:
                 self.PROC_SETS.append((['%s'%X], ['SM125'], [era]))
@@ -151,17 +163,17 @@ class THDMHiggsModel(PhysicsModel):
 
         self.modelBuilder.doSet('POI', 'x,r')
         # We don't intend on actually floating these in any fits...
-        self.modelBuilder.out.var('mH').setConstant(True)
+        self.modelBuilder.out.var('cba').setConstant(True)
         self.modelBuilder.out.var('tanb').setConstant(True)
 
         # Build the intermediate terms for H->hh->bbtautau and A->Zh->LLtautau scaling
-        for E in self.modelFiles:
-            self.modelBuilder.factory_('expr::br_Hhhbbtautau_%s("2*@0*@1*@2", br_Hhh_%s,br_htautau_%s,br_hbb_%s)' % (E,E,E,E))
-            self.modelBuilder.factory_('expr::br_AZhLLtautau_%s("0.10099*@0*@1", br_AZh_%s,br_htautau_%s)' % (E,E,E))
+        #for E in self.modelFiles:
+        #    self.modelBuilder.factory_('expr::br_Hhhbbtautau_%s("2*@0*@1*@2", br_Hhh_%s,br_htautau_%s,br_hbb_%s)' % (E,E,E,E))
+        #    self.modelBuilder.factory_('expr::br_AZhLLtautau_%s("0.10099*@0*@1", br_AZh_%s,br_htautau_%s)' % (E,E,E))
 
         for proc_set in self.PROC_SETS:
             for (P, D, E) in itertools.product(*proc_set):
-                # print (P, D, E)
+                print (P, D, E)
                 if ((self.SMSignal not in D) and ("ww125" not in P) and ("tt125" not in P)): #altenative hypothesis if SMSignal not in process name
                     terms = ['xs_%s_%s' % (P, E), 'br_%s_%s'% (D, E)]
                     terms += ['r']
@@ -176,7 +188,16 @@ class THDMHiggsModel(PhysicsModel):
         """Return a triple of (production, decay, energy)"""
         P = ''
         D = ''
-        if "_" in process: 
+        alpha=''
+	beta=''
+	gamma=''
+	if "_SM125" in process:
+	    (alpha, beta, gamma) = process.split("_")
+	    D = 'SM125'
+	    if alpha=='ggZH' or alpha=='ggH': P='ggH'
+	    if alpha=='qqH' or alpha=='bbH': P='qqH'
+	    if alpha=='WH'or alpha=='ZH': P='VH'
+        elif "_" in process:
             (P, D) = process.split("_")
         else:
             raise RuntimeError, 'Expected signal process %s to be of the form PROD_DECAY' % process

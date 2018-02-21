@@ -20,10 +20,6 @@ parser.add_argument(
 parser.add_argument(
     '--y-title', default=None, help="""Title for the y-axis""")
 parser.add_argument(
-    '--y-axis-min', default=None, help="""Minimum for y-axis range""")
-parser.add_argument(
-    '--y-axis-max', default=None, help="""Maximum for y-axis range""")
-parser.add_argument(
     '--process', help='The process on which a limit has been calculated. [gg#phi, bb#phi]', default="gg#phi")
 parser.add_argument(
     '--cms-sub', default='Internal', help="""Text below the CMS logo""")
@@ -55,8 +51,6 @@ parser.add_argument(
 parser.add_argument(
     '--use-hig-17-020-style', action='store_true', help="""Plot a dashed black line for the expected limit as in hig-17-020""")
 parser.add_argument('--table_vals', help='Amount of values to be written in a table for different masses', default=10)
-parser.add_argument(
-    '--by-channel', action='store_true', help="""Style for limits split by channel""")
 args = parser.parse_args()
 
 style_dict_exponly = {
@@ -91,15 +85,10 @@ style_dict_inj = {
 
 style_dict_hig_17_020 = {
         'style' : {
-            'exp0' : { 'LineColor' : ROOT.kBlack, 'LineStyle' : 2},
-            'exp1' : { 'FillColor' : ROOT.kGreen+1}, 
-            'exp2' : { 'FillColor' : ROOT.kOrange}
+            'exp0' : { 'LineColor' : ROOT.kBlack, 'LineStyle' : 2}
             },
         'legend' : {
-            'exp1' : { 'Label' : '68% expected'},
-            'exp2' : { 'Label' : '95% expected'}
             }
-
         }
         
 style_dict_hig_17_020_noHbkg = {
@@ -110,8 +99,8 @@ style_dict_hig_17_020_noHbkg = {
             },
         'legend' : {
             'exp0' : { 'Label' : 'Expected for no H(125 GeV) in BG'},
-            'exp1' : { 'Label' : '68% expected no H(125 GeV) in BG'},
-            'exp2' : { 'Label' : '95% expected no H(125 GeV) in BG'}
+            'exp1' : { 'Label' : '#pm1#sigma no H(125 GeV) in BG'},
+            'exp2' : { 'Label' : '#pm2#sigma no H(125 GeV) in BG'}
             }
         }
 
@@ -162,21 +151,12 @@ graphs = []
 graph_sets = []
 
 if args.higgs_bg or args.higgs_injected:
-    legend = plot.PositionedLegend(0.48, 0.25, 3, 0.015)
-    legend.SetTextSize(0.025)
-elif args.by_channel:
-    legend = plot.PositionedLegend(0.18, 0.25, 3, 0.02) #0.25
-    legend.SetTextSize(0.03)
-    legend.SetHeader('Expected:')
+    legend = plot.PositionedLegend(0.4, 0.25, 3, 0.015)
 else:
-    legend = plot.PositionedLegend(0.15, 0.2, 3, 0.015) #0.25
-    legend.SetTextSize(0.03)
+    legend = plot.PositionedLegend(0.3, 0.2, 3, 0.015)
 
 if args.do_new_ggH:
-    if not (args.higgs_bg or args.higgs_injected): 
-      legend.SetX1(legend.GetX1() - 0.1)
-      legend.SetX2(legend.GetX2() - 0.1)
-
+    legend.SetX1(legend.GetX1() - 0.05)
     legend.SetY1(legend.GetY1() - 0.08)
 #legend = plot.PositionedLegend(0.45, 0.10, 3, 0.015)
 #plot.Set(legend, NColumns=2)
@@ -269,9 +249,8 @@ if args.process == "bb#phi":
 if args.y_title is not None:
     axis[0].GetYaxis().SetTitle(args.y_title)
 axis[0].GetXaxis().SetTitle(args.x_title)
-axis[0].GetXaxis().SetNoExponent()
-axis[0].GetXaxis().SetMoreLogLabels()
 axis[0].GetXaxis().SetLabelOffset(axis[0].GetXaxis().GetLabelOffset()*2)
+
 
 if args.logy:
     axis[0].SetMinimum(0.1)  # we'll fix this later
@@ -286,11 +265,6 @@ if args.logy:
 
 y_min, y_max = (plot.GetPadYMin(pads[0]), plot.GetPadYMax(pads[0]))
 plot.FixBothRanges(pads[0], y_min if args.logy else 0, 0.05 if args.logy else 0, y_max, 0.25)
-
-if args.y_axis_min is not None or args.y_axis_max is not None:
-  hobj = plot.GetAxisHist(pads[0])
-  if args.y_axis_min is not None: hobj.SetMinimum(float(args.y_axis_min))
-  if args.y_axis_max is not None: hobj.SetMaximum(float(args.y_axis_max))
 
 ratio_graph_sets = []
 ratio_graphs = []
@@ -349,6 +323,6 @@ plot.DrawCMSLogo(pads[0], 'CMS', args.cms_sub, 11, 0.045, 0.035, 1.2, '', 0.8)
 plot.DrawTitle(pads[0], args.title_right, 3)
 plot.DrawTitle(pads[0], args.title_left, 1)
 
-canv.Print('.pdf')
+#canv.Print('.pdf')
 canv.Print('.png')
 # maketable.TablefromJson(args.table_vals, args.file, "TablefromJson.txt")

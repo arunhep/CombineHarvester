@@ -88,10 +88,10 @@ class THDMHiggsModel(PhysicsModel):
         hist.Draw('COLZ')
         plot.DrawTitle(pads[0], name, 3)
         #canv.Print('model_'+name+'.pdf')
-        canv.Print('model_'+name+'.png')
+        #canv.Print('model_'+name+'.png')
         pads[0].SetLogz(True)
         #canv.Print('model_'+name+'_log.pdf')
-        canv.Print('model_'+name+'_log.png')
+        #canv.Print('model_'+name+'_log.png')
 
         dh = ROOT.RooDataHist('dh_%s'%name, 'dh_%s'%name, ROOT.RooArgList(*varlist), ROOT.RooFit.Import(hist))
         hfunc = ROOT.RooHistFunc(name, name, ROOT.RooArgSet(*varlist), dh)

@@ -10,7 +10,7 @@ Observation::Observation()
       rate_(0.0),
       shape_(),
       data_(nullptr) {
-    this->set_process("data_obs");
+    this->set_process("DATA");
   }
 
 Observation::~Observation() { }
@@ -130,7 +130,7 @@ std::ostream& operator<< (std::ostream &out, Observation const& val) {
   % val.channel()
   % val.bin()
   % val.bin_id()
-  % "data_obs"
+  % "DATA"
   % val.rate()
   % (bool(val.shape()) || bool(val.data()));
   return out;
