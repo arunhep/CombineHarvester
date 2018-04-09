@@ -97,16 +97,16 @@ int main(int argc, char** argv) {
   typedef vector<string> VString;
   typedef vector<pair<int, string>> Categories;
   std::map<string, string> input_dir;
-  input_dir["em"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_OF.root";
-  input_dir["dytt"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_OF.root";
-  input_dir["top"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_OF.root";
+  input_dir["em"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_OF_V2.root";
+  input_dir["dytt"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_OF_V2.root";
+  input_dir["top"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_OF_V2.root";
   if (include_SF){
-  input_dir["ee"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_ee_VBF.root";
-  input_dir["eedytt"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_ee_VBF.root";
-  input_dir["eetop"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_ee_VBF.root";
-  input_dir["mm"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_mm_VBF.root";
-  input_dir["mmdytt"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_mm_VBF.root";
-  input_dir["mmtop"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_mm_VBF.root";
+  input_dir["ee"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_ee_VBF_V2.root";
+  input_dir["eedytt"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_ee_VBF_V2.root";
+  input_dir["eetop"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_ee_VBF_V2.root";
+  input_dir["mm"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_mm_VBF_V2.root";
+  input_dir["mmdytt"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_mm_VBF_V2.root";
+  input_dir["mmtop"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_mm_VBF_V2.root";
   }
 
   VString chns =
@@ -138,16 +138,16 @@ int main(int argc, char** argv) {
   //RooRealVar mh("mh", "mh", 90., 3200.);
 
   map<string, VString> bkg_procs;
-  bkg_procs["em"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS"};//{"ggWW", "Vg", "VVV", "top", "Fake", "WW", "DY", "VZ", "VgS"};
-  bkg_procs["dytt"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS"};
-  bkg_procs["top"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS"};
+  bkg_procs["em"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};//{"ggWW", "Vg", "VVV", "top", "Fake", "WW", "DY", "VZ", "VgS"};
+  bkg_procs["dytt"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
+  bkg_procs["top"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
   if (include_SF){
-  bkg_procs["ee"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS"};
-  bkg_procs["eedytt"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS"};
-  bkg_procs["eetop"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS"};
-  bkg_procs["mm"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS"};
-  bkg_procs["mmdytt"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS"};
-  bkg_procs["mmtop"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS"};
+  bkg_procs["ee"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
+  bkg_procs["eedytt"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
+  bkg_procs["eetop"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
+  bkg_procs["mm"] = {"WW", "DY", "VVV", "top", "Fake", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};//"ggWW",
+  bkg_procs["mmdytt"] = {"WW", "DY", "VVV", "top", "Fake", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};//"ggWW",
+  bkg_procs["mmtop"] = {"WW", "DY", "VVV", "top", "Fake", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};//"ggWW",
   }
 
   VString SM_procs = {"WH_hww", "ZH_hww", "ggZH_hww", "ggH_hww", "qqH_hww", "H_htt"};//{"ggH_hww_SM125", "qqH_hww_SM125", "ZH_hww_SM125", "ggZH_hww_SM125","WH_hww_SM125","bbH_hww_SM125"};
@@ -236,13 +236,14 @@ int main(int argc, char** argv) {
   map<string, VString> signal_types = {
     {"ggH", {"ggH_HWW"}},//,
     {"qqH", {"qqH_HWW"}},
-    {"ggH_INT", {"ggH_INTHWW"}}
+    {"ggH_SBI", {"ggH_SBIHWW"}},
+    {"qqH_SBI", {"qqH_SBIHWW"}}
     //{"bbH", {"bbh_htautau", "bbH_Htautau", "bbA_Atautau"}}
   };
   if (!include_VBF){
 signal_types = {
     {"ggH", {"ggH_HWW"}},//,
-    {"ggH_INT", {"ggH_INTHWW"}}
+    {"ggH_SBI", {"ggH_SBIHWW"}}
     //{"bbH", {"bbh_htautau", "bbH_Htautau", "bbA_Atautau"}}
   };
   }
@@ -252,9 +253,9 @@ signal_types = {
       //{"bbH", {"bbH"}}
     };
   }*/
-    vector<string> sig_procs = {"ggH","qqH","ggH_INT"};//,"bbH"
+    vector<string> sig_procs = {"ggH","qqH","ggH_SBI","qqH_SBI"};//,"bbH"
   if (!include_VBF){
-    sig_procs = {"ggH","ggH_INT"};
+    sig_procs = {"ggH","ggH_SBI"};
   }
   for(auto chn : chns){
     cb.AddObservations({"*"}, {"hww"}, {"13TeV"}, {chn}, cats[chn+"_13TeV"]);
@@ -265,7 +266,10 @@ signal_types = {
     if (include_VBF){
     cb.AddProcesses(masses, {"hww"}, {"13TeV"}, {chn}, signal_types["qqH"], cats[chn+"_13TeV"], true);
     }
-    cb.AddProcesses(masses, {"hww"}, {"13TeV"}, {chn}, signal_types["ggH_INT"], cats[chn+"_13TeV"], true);
+    cb.AddProcesses(masses, {"hww"}, {"13TeV"}, {chn}, signal_types["ggH_SBI"], cats[chn+"_13TeV"], true);
+    if (include_VBF){
+    cb.AddProcesses(masses, {"hww"}, {"13TeV"}, {chn}, signal_types["qqH_SBI"], cats[chn+"_13TeV"], true);
+    }
     //cb.AddProcesses(masses, {"hww"}, {"13TeV"}, {chn}, signal_types["bbH"], cats[chn+"_13TeV"], true);
     //cb.AddProcesses({"*"}, {"hww"}, {"13TeV"}, {chn}, SM_tauprocs, cats[chn+"_13TeV"], false);
     if (chn == "em" or chn == "dytt" or chn == "top"){
@@ -287,8 +291,8 @@ signal_types = {
     std::cout << "Test1 \n ";
     cb.cp().channel({chn}).backgrounds().ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/mTi/histo_$PROCESS",
-        "hww2l2v_13TeV_$BIN/mTi/histo_$PROCESS_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/events/histo_$PROCESS",
+        "hww2l2v_13TeV_$BIN/events/histo_$PROCESS_$SYSTEMATIC");
     std::cout << "Test2 \n ";
 /*    cb.cp().channel({chn}).process(SM_procs).ExtractShapes(
          input_dir[chn],
@@ -297,18 +301,24 @@ signal_types = {
     std::cout << "Test3 \n ";
     cb.cp().channel({chn}).process(signal_types["ggH"]).ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/mTi/histo_ggH_hww_$MASS_c10brn00",
-        "hww2l2v_13TeV_$BIN/mTi/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/events/histo_ggH_hww_$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/events/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
     if (include_VBF){
     cb.cp().channel({chn}).process(signal_types["qqH"]).ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/mTi/histo_qqH_hww_$MASS_c10brn00",
-        "hww2l2v_13TeV_$BIN/mTi/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/events/histo_qqH_hww_$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/events/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
     }
-    cb.cp().channel({chn}).process(signal_types["ggH_INT"]).ExtractShapes(
+    cb.cp().channel({chn}).process(signal_types["ggH_SBI"]).ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/mTi/histo_ggH_hww_SBI$MASS_c10brn00",
-        "hww2l2v_13TeV_$BIN/mTi/histo_ggH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/events/histo_ggH_hww_SBI$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/events/histo_ggH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+    if (include_VBF){
+    cb.cp().channel({chn}).process(signal_types["qqH_SBI"]).ExtractShapes(
+        input_dir[chn],
+        "hww2l2v_13TeV_$BIN/events/histo_qqH_hww_SBI$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/events/histo_qqH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+    }
     std::cout << "Test4 \n ";
   }else if (chn == "ee" or chn == "mm"){
     std::cout << "Test5 \n ";
@@ -332,10 +342,16 @@ signal_types = {
         "hwwhm_13TeV_$BIN/mTi/histo_qqH_hww_$MASS_c10brn00",
         "hwwhm_13TeV_$BIN/mTi/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
     }
-    cb.cp().channel({chn}).process(signal_types["ggH_INT"]).ExtractShapes(
+    cb.cp().channel({chn}).process(signal_types["ggH_SBI"]).ExtractShapes(
         input_dir[chn],
         "hwwhm_13TeV_$BIN/mTi/histo_ggH_hww_SBI$MASS_c10brn00",
         "hwwhm_13TeV_$BIN/mTi/histo_ggH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+    if (include_VBF){
+    cb.cp().channel({chn}).process(signal_types["qqH_SBI"]).ExtractShapes(
+        input_dir[chn],
+        "hwwhm_13TeV_$BIN/mTi/histo_qqH_hww_SBI$MASS_c10brn00",
+        "hwwhm_13TeV_$BIN/mTi/histo_qqH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+    }
     std::cout << "Test8 \n ";
    // cb.cp().channel({chn}).process(signal_types["bbH"]).ExtractShapes(
    //     input_dir[chn] + "hww_"+chn+".inputs-mssm-13TeV"+postfix+".root",
@@ -358,7 +374,10 @@ signal_types = {
     if (include_VBF){
     cb.AddProcesses(massesadd, {"hww"}, {"13TeV"}, {chn}, signal_types["qqH"], cats[chn+"_13TeV"], true);
     }
-    cb.AddProcesses(massesadd, {"hww"}, {"13TeV"}, {chn}, signal_types["ggH_INT"], cats[chn+"_13TeV"], true);
+    cb.AddProcesses(massesadd, {"hww"}, {"13TeV"}, {chn}, signal_types["ggH_SBI"], cats[chn+"_13TeV"], true);
+    if (include_VBF){
+    cb.AddProcesses(massesadd, {"hww"}, {"13TeV"}, {chn}, signal_types["qqH_SBI"], cats[chn+"_13TeV"], true);
+    }
     }
 
   //Remove signal from ControlRegion
@@ -373,8 +392,8 @@ signal_types = {
     std::cout << "Test1 \n ";
     cb.cp().channel({chn}).backgrounds().ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/mTi/histo_$PROCESS",
-        "hww2l2v_13TeV_$BIN/mTi/histo_$PROCESS_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/events/histo_$PROCESS",
+        "hww2l2v_13TeV_$BIN/events/histo_$PROCESS_$SYSTEMATIC");
     std::cout << "Test2 \n ";
 /*    cb.cp().channel({chn}).process(SM_procs).ExtractShapes(
          input_dir[chn],
@@ -383,18 +402,24 @@ signal_types = {
     std::cout << "Test3 \n ";
     cb.cp().channel({chn}).process(signal_types["ggH"]).ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/mTi/histo_ggH_hww_$MASS_c10brn00",
-        "hww2l2v_13TeV_$BIN/mTi/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/events/histo_ggH_hww_$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/events/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
     if (include_VBF){
     cb.cp().channel({chn}).process(signal_types["qqH"]).ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/mTi/histo_qqH_hww_$MASS_c10brn00",
-        "hww2l2v_13TeV_$BIN/mTi/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/events/histo_qqH_hww_$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/events/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
     }
-    cb.cp().channel({chn}).process(signal_types["ggH_INT"]).ExtractShapes(
+    cb.cp().channel({chn}).process(signal_types["ggH_SBI"]).ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/mTi/histo_ggH_hww_SBI$MASS_c10brn00",
-        "hww2l2v_13TeV_$BIN/mTi/histo_ggH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/events/histo_ggH_hww_SBI$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/events/histo_ggH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+    if (include_VBF){
+    cb.cp().channel({chn}).process(signal_types["qqH_SBI"]).ExtractShapes(
+        input_dir[chn],
+        "hww2l2v_13TeV_$BIN/events/histo_qqH_hww_SBI$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/events/histo_qqH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+    }
     std::cout << "Test4 \n ";
   }else if (chn == "em"){
     std::cout << "Test5 \n ";
@@ -415,13 +440,19 @@ signal_types = {
     if (include_VBF){
     cb.cp().channel({chn}).process(signal_types["qqH"]).ExtractShapes(
         input_dir[chn],
-        "hwwhm_13TeV_$BIN/mTi/histo_qqH_hww_$MASS_c10brn00",
-        "hwwhm_13TeV_$BIN/mTi/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
+        "hwwhm_13TeV_$BIN/mTi_VBF/histo_qqH_hww_$MASS_c10brn00",
+        "hwwhm_13TeV_$BIN/mTi_VBF/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
     }
-    cb.cp().channel({chn}).process(signal_types["ggH_INT"]).ExtractShapes(
+    cb.cp().channel({chn}).process(signal_types["ggH_SBI"]).ExtractShapes(
         input_dir[chn],
         "hwwhm_13TeV_$BIN/mTi/histo_ggH_hww_SBI$MASS_c10brn00",
         "hwwhm_13TeV_$BIN/mTi/histo_ggH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+    if (include_VBF){
+    cb.cp().channel({chn}).process(signal_types["qqH_SBI"]).ExtractShapes(
+        input_dir[chn],
+        "hwwhm_13TeV_$BIN/mTi_VBF/histo_qqH_hww_SBI$MASS_c10brn00",
+        "hwwhm_13TeV_$BIN/mTi_VBF/histo_qqH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+    }
     std::cout << "Test8 \n ";
    // cb.cp().channel({chn}).process(signal_types["bbH"]).ExtractShapes(
    //     input_dir[chn] + "hww_"+chn+".inputs-mssm-13TeV"+postfix+".root",
@@ -661,12 +692,12 @@ signal_types = {
 
   bool do_morphing = true;
   map<string, RooAbsReal *> mass_var = {
-    {"ggH_HWW", &mH}, {"qqH_HWW", &mH}, {"ggH_INTHWW", &mH}//,
+    {"ggH_HWW", &mH}, {"qqH_HWW", &mH}, {"ggH_SBIHWW", &mH}, {"qqH_SBIHWW", &mH}//,
     //{"bbh_htautau", &mh}, {"bbH_Htautau", &mH}, {"bbA_Atautau", &mA}
   };
   if (!include_VBF){
 mass_var = {
-    {"ggH_HWW", &mH},{"ggH_INTHWW", &mH}  };
+    {"ggH_HWW", &mH},{"ggH_SBIHWW", &mH}  };
   }
 /*  if(mass=="MH"){
     mass_var = {
@@ -678,9 +709,9 @@ mass_var = {
     auto bins = cb.bin_set();
     for (auto b : bins) {
       std::cout << "Bin:" << b << "\n";
-      auto procs = cb.cp().bin({b}).process(ch::JoinStr({signal_types["ggH"], signal_types["qqH"], signal_types["ggH_INT"]})).process_set();//, signal_types["bbH"]
+      auto procs = cb.cp().bin({b}).process(ch::JoinStr({signal_types["ggH"], signal_types["qqH"], signal_types["ggH_SBI"], signal_types["qqH_SBI"]})).process_set();//, signal_types["bbH"]
     if (!include_VBF){
-      procs = cb.cp().bin({b}).process(ch::JoinStr({signal_types["ggH"], signal_types["ggH_INT"]})).process_set();
+      procs = cb.cp().bin({b}).process(ch::JoinStr({signal_types["ggH"], signal_types["ggH_SBI"]})).process_set();
     }
       for (auto p : procs) {
         std::cout << "Process:" << p << "\n";
@@ -691,10 +722,12 @@ mass_var = {
   }
   demo.Close();
   cb.AddWorkspace(ws);
+  if (do_morphing) {
   if (include_VBF){
-  cb.cp().process(ch::JoinStr({signal_types["ggH"], signal_types["qqH"], signal_types["ggH_INT"]})).ExtractPdfs(cb, "hww", "$BIN_$PROCESS_morph");//, signal_types["bbH"]
+  cb.cp().process(ch::JoinStr({signal_types["ggH"], signal_types["qqH"], signal_types["ggH_SBI"], signal_types["qqH_SBI"]})).ExtractPdfs(cb, "hww", "$BIN_$PROCESS_morph");//, signal_types["bbH"]
   }else{
-  cb.cp().process(ch::JoinStr({signal_types["ggH"], signal_types["ggH_INT"]})).ExtractPdfs(cb, "hww", "$BIN_$PROCESS_morph");//, signal_types["bbH"]
+  cb.cp().process(ch::JoinStr({signal_types["ggH"], signal_types["ggH_SBI"]})).ExtractPdfs(cb, "hww", "$BIN_$PROCESS_morph");//, signal_types["bbH"]
+  }
   }
   cb.PrintAll();
 

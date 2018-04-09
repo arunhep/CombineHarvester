@@ -156,7 +156,7 @@ class THDMHiggsModel(PhysicsModel):
             # Do the xsecs and BRs for the three neutral Higgs bosons
             for X in ['H']:#['h', 'H', 'A']:
                 self.doHistFunc('xs_gg%s_%s' % (X, era), f.Get(hd['xs_gg%s'%X]), pars)
-		self.doHistFunc('xs_gg%sINT_%s' % (X, era), f.Get(hd['xs_gg%s'%X]), pars)
+		#self.doHistFunc('xs_gg%sSBI_%s' % (X, era), f.Get(hd['xs_gg%s'%X]), pars)
                 self.doHistFunc('xs_qq%s_%s' % (X, era), f.Get(hd['xs_qq%s'%X]), pars)
                 # Build the Santander-matched bbX cross section. The matching depends
                 # on the mass of the Higgs boson in question, so for the h and A we
@@ -180,10 +180,14 @@ class THDMHiggsModel(PhysicsModel):
             # And the SM terms
             for X in ['ggH', 'qqH', 'VH']:
                 self.PROC_SETS.append((['%s'%X], ['SM125'], [era]))
+            self.PROC_SETS.append((['sbi'], ['bkg'], [era]))
 
     def doParametersOfInterest(self):
         """Create POI and other parameters, and define the POI set."""
         self.modelBuilder.doVar("r[1,0,20]")
+        self.modelBuilder.factory_("expr::rsig(\"(@0-sqrt(@0))\", r)")
+        self.modelBuilder.factory_("expr::rsbi(\"(sqrt(@0))\", r)")
+        self.modelBuilder.factory_("expr::rbkg(\"(1-sqrt(@0))\", r)")
 
         #MSSMvsMS
         self.modelBuilder.doVar("x[1,0,1]")
@@ -205,22 +209,50 @@ class THDMHiggsModel(PhysicsModel):
                 print (P, D, E)
                 if ((self.SMSignal not in D) and ("ww125" not in P) and ("tt125" not in P)): #altenative hypothesis if SMSignal not in process name
                     terms = ['xs_%s_%s' % (P, E), 'br_%s_%s'% (D, E)]
-                    terms += ['r']
+                    if "SBI" in P:
+                        terms += ['rsbi']
+                    else:
+                        terms += ['rsig']
                     terms += [self.sigNorms[1]]
                 else:
                     terms = [self.sigNorms[0]]
+                if ("sbi" in P) and ("bkg" in D):
+                    terms = ['rbkg']
                 self.modelBuilder.factory_('prod::scaling_%s_%s_%s(%s)' % (P,D,E,','.join(terms)))
                 self.modelBuilder.out.function('scaling_%s_%s_%s' % (P,D,E)).Print('')
-	P = "ggHINT"
+	P = "ggHSBI"
+	D = "HWW"
+	E = "13TeV"
+	terms = ['xs_ggH_13TeV', 'br_HWW_13TeV']
+        terms += ['rsbi']
+        terms += [self.sigNorms[1]]
+        #terms += ['s']
+        #terms += ['systeff_xs_ggH_scale_13TeV']
+        #terms += ['systeff_xs_ggH_pdf_13TeV']
+        self.modelBuilder.factory_('prod::scaling_ggH_SBIHWW_13TeV(%s)' % (','.join(terms)))
+        self.modelBuilder.out.function('scaling_ggH_SBIHWW_13TeV').Print('')
+	P = "qqH"
 	D = "HWW"
 	E = "13TeV"
 	terms = ['xs_%s_%s' % (P, E), 'br_%s_%s'% (D, E)]
-        terms += ['r']
+        terms += ['rsig']
         terms += [self.sigNorms[1]]
+        #terms += ['s']
         #terms += ['systeff_xs_ggH_scale_13TeV']
         #terms += ['systeff_xs_ggH_pdf_13TeV']
-        self.modelBuilder.factory_('prod::scaling_ggH_INTHWW_13TeV(%s)' % (','.join(terms)))
-        self.modelBuilder.out.function('scaling_ggH_INTHWW_13TeV').Print('')
+        self.modelBuilder.factory_('prod::scaling_qqH_HWW_13TeV(%s)' % (','.join(terms)))
+        self.modelBuilder.out.function('scaling_qqH_HWW_13TeV').Print('')
+	P = "qqHSBI"
+	D = "HWW"
+	E = "13TeV"
+	terms = ['xs_qqH_13TeV', 'br_HWW_13TeV']
+        terms += ['rsbi']
+        terms += [self.sigNorms[1]]
+        #terms += ['s']
+        #terms += ['systeff_xs_ggH_scale_13TeV']
+        #terms += ['systeff_xs_ggH_pdf_13TeV']
+        self.modelBuilder.factory_('prod::scaling_qqH_SBIHWW_13TeV(%s)' % (','.join(terms)))
+        self.modelBuilder.out.function('scaling_qqH_SBIHWW_13TeV').Print('')
 
 
     def getHiggsProdDecMode(self, bin, process):
@@ -255,7 +287,12 @@ class THDMHiggsModel(PhysicsModel):
             scaling = 'scaling_%s_%s_%s' % (P, D, E)
             print 'Scaling %s/%s as %s' % (bin, process, scaling)
             return scaling
+        elif (process in ["qqWWqq","ggWW","qqH_hww","ggH_hww"]) and (bin in ["hww_ee_11_13TeV","hww_em_11_13TeV","hww_em_10_13TeV","hww_em_9_13TeV","hww_em_8_13TeV","hww_mm_11_13TeV"]):
+            scaling = 'scaling_sbi_bkg_13TeV'
+            print 'Scaling %s/%s as %s' % (bin, process, scaling)
+            return scaling
         else:
+            print 'Scaling %s/%s as 1' % (bin, process)
             return 1
 
 

@@ -1,5 +1,3 @@
-//TODO
-//Re-add qqH_hww in SM_procs
 #include <string>
 #include <map>
 #include <set>
@@ -76,9 +74,8 @@ int main(int argc, char** argv) {
   bool check_neg_bins = false;
   bool poisson_bbb = false;
   bool do_w_weighting = false;
-  bool include_VBF = false;
+  bool include_VBF = true;
   bool include_SF = false;
-  string masscateg = "";
   po::variables_map vm;
   po::options_description config("configuration");
   config.add_options()
@@ -93,24 +90,23 @@ int main(int argc, char** argv) {
     ("control_region", po::value<int>(&control_region)->default_value(0))
     ("check_neg_bins", po::value<bool>(&check_neg_bins)->default_value(false))
     ("poisson_bbb", po::value<bool>(&poisson_bbb)->default_value(false))
-    ("w_weighting", po::value<bool>(&do_w_weighting)->default_value(false))
-    ("masscateg", po::value<string>(&masscateg)->default_value(""));
+    ("w_weighting", po::value<bool>(&do_w_weighting)->default_value(false));
   po::store(po::command_line_parser(argc, argv).options(config).run(), vm);
   po::notify(vm);
 
   typedef vector<string> VString;
   typedef vector<pair<int, string>> Categories;
   std::map<string, string> input_dir;
-  input_dir["em"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/DNN/plots_HWWhighMass2016_OF_peter.root";
-  input_dir["dytt"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/DNN/plots_HWWhighMass2016_OF_peter.root";
-  input_dir["top"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/DNN/plots_HWWhighMass2016_OF_peter.root";
+  input_dir["em"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_OF_peter.root";
+  input_dir["dytt"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_OF_peter.root";
+  input_dir["top"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_OF_peter.root";
   if (include_SF){
-  input_dir["ee"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_ee_VBF.root";
-  input_dir["eedytt"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_ee_VBF.root";
-  input_dir["eetop"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_ee_VBF.root";
-  input_dir["mm"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_mm_VBF.root";
-  input_dir["mmdytt"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_mm_VBF.root";
-  input_dir["mmtop"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_mm_VBF.root";
+  input_dir["ee"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_ee_VBF_V2.root";
+  input_dir["eedytt"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_ee_VBF_V2.root";
+  input_dir["eetop"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_ee_VBF_V2.root";
+  input_dir["mm"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_mm_VBF_V2.root";
+  input_dir["mmdytt"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_mm_VBF_V2.root";
+  input_dir["mmtop"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_mm_VBF_V2.root";
   }
 
   VString chns =
@@ -135,42 +131,26 @@ int main(int argc, char** argv) {
   }else{
     massvar="mH";
   }
-  float lowmass;
-  float highmass;
-  if (masscateg=="low"){
-    lowmass = 90.;
-    highmass = 200.;
-  }else if (masscateg=="medium"){
-    lowmass = 200.;
-    highmass = 500.;
-  }else if (masscateg=="high"){
-    lowmass = 500.;
-    highmass = 3200.;
-  }else{
-    lowmass = 90.;
-    highmass = 3200.;
-  }
-
-  RooRealVar mH(massvar.c_str(), massvar.c_str(), lowmass, highmass);
+  RooRealVar mH(massvar.c_str(), massvar.c_str(), 90., 3200.);
   if (mass=="indep"){
     mH.setConstant(true);
   }
   //RooRealVar mh("mh", "mh", 90., 3200.);
 
   map<string, VString> bkg_procs;
-  bkg_procs["em"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS"};//{"ggWW", "Vg", "VVV", "top", "Fake", "WW", "DY", "VZ", "VgS"};
-  bkg_procs["dytt"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS"};
-  bkg_procs["top"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS"};
+  bkg_procs["em"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};//{"ggWW", "Vg", "VVV", "top", "Fake", "WW", "DY", "VZ", "VgS"};
+  bkg_procs["dytt"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};//, "WW2J", "qqWWqq"
+  bkg_procs["top"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
   if (include_SF){
-  bkg_procs["ee"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS"};
-  bkg_procs["eedytt"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS"};
-  bkg_procs["eetop"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS"};
-  bkg_procs["mm"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS"};
-  bkg_procs["mmdytt"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS"};
-  bkg_procs["mmtop"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS"};
+  bkg_procs["ee"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
+  bkg_procs["eedytt"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
+  bkg_procs["eetop"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
+  bkg_procs["mm"] = {"WW", "DY", "VVV", "top", "Fake", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};//"ggWW",
+  bkg_procs["mmdytt"] = {"WW", "DY", "VVV", "top", "Fake", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};//"ggWW",
+  bkg_procs["mmtop"] = {"WW", "DY", "VVV", "top", "Fake", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};//"ggWW",
   }
 
-  VString SM_procs = {"WH_hww", "ZH_hww", "ggZH_hww", "ggH_hww", "H_htt"};//{"ggH_hww_SM125", "qqH_hww_SM125", "ZH_hww_SM125", "ggZH_hww_SM125","WH_hww_SM125","bbH_hww_SM125"};
+  VString SM_procs = {"WH_hww", "ZH_hww", "ggZH_hww", "ggH_hww", "qqH_hww", "H_htt"};//{"ggH_hww_SM125", "qqH_hww_SM125", "ZH_hww_SM125", "ggZH_hww_SM125","WH_hww_SM125","bbH_hww_SM125"};
   //VString SM_tauprocs = {"H_htt"};//{"ggH_htt_SM125", "qqH_htt_SM125", "ZH_htt_SM125", "WH_htt_SM125"};
 
   //Example - could fill this map with hardcoded binning for different
@@ -256,12 +236,14 @@ int main(int argc, char** argv) {
   map<string, VString> signal_types = {
     {"ggH", {"ggH_HWW"}},//,
     {"qqH", {"qqH_HWW"}},
-    {"ggH_INT", {"ggH_INTHWW"}}
+    {"ggH_SBI", {"ggH_SBIHWW"}},
+    {"qqH_SBI", {"qqH_SBIHWW"}}
     //{"bbH", {"bbh_htautau", "bbH_Htautau", "bbA_Atautau"}}
   };
   if (!include_VBF){
 signal_types = {
-    {"ggH", {"ggH_HWW"}}
+    {"ggH", {"ggH_HWW"}},//,
+    {"ggH_SBI", {"ggH_SBIHWW"}}
     //{"bbH", {"bbh_htautau", "bbH_Htautau", "bbA_Atautau"}}
   };
   }
@@ -271,9 +253,9 @@ signal_types = {
       //{"bbH", {"bbH"}}
     };
   }*/
-    vector<string> sig_procs = {"ggH","qqH","ggH_INT"};//,"bbH"
+    vector<string> sig_procs = {"ggH","qqH","ggH_SBI","qqH_SBI"};//,"bbH"
   if (!include_VBF){
-    sig_procs = {"ggH"};
+    sig_procs = {"ggH","ggH_SBI"};
   }
   for(auto chn : chns){
     cb.AddObservations({"*"}, {"hww"}, {"13TeV"}, {chn}, cats[chn+"_13TeV"]);
@@ -283,8 +265,10 @@ signal_types = {
     cb.AddProcesses(masses, {"hww"}, {"13TeV"}, {chn}, signal_types["ggH"], cats[chn+"_13TeV"], true);
     if (include_VBF){
     cb.AddProcesses(masses, {"hww"}, {"13TeV"}, {chn}, signal_types["qqH"], cats[chn+"_13TeV"], true);
-
-    cb.AddProcesses(masses, {"hww"}, {"13TeV"}, {chn}, signal_types["ggH_INT"], cats[chn+"_13TeV"], true);
+    }
+    cb.AddProcesses(masses, {"hww"}, {"13TeV"}, {chn}, signal_types["ggH_SBI"], cats[chn+"_13TeV"], true);
+    if (include_VBF){
+    cb.AddProcesses(masses, {"hww"}, {"13TeV"}, {chn}, signal_types["qqH_SBI"], cats[chn+"_13TeV"], true);
     }
     //cb.AddProcesses(masses, {"hww"}, {"13TeV"}, {chn}, signal_types["bbH"], cats[chn+"_13TeV"], true);
     //cb.AddProcesses({"*"}, {"hww"}, {"13TeV"}, {chn}, SM_tauprocs, cats[chn+"_13TeV"], false);
@@ -299,7 +283,7 @@ signal_types = {
               return (BinIsControlRegion(obj) && obj->signal());
               });
 
-  ch::AddMSSMRun2Systematics_HWW_DNN(cb,control_region);
+  ch::AddMSSMRun2Systematics_HWW_lat(cb,control_region);
   //! [part7]
   for (string chn:chns){
   if (chn == "eedytt" or chn == "eetop" or chn == "mmdytt" or chn == "mmtop"){
@@ -307,8 +291,8 @@ signal_types = {
     std::cout << "Test1 \n ";
     cb.cp().channel({chn}).backgrounds().ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/mTi/histo_$PROCESS",
-        "hww2l2v_13TeV_$BIN/mTi/histo_$PROCESS_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_$PROCESS",
+        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_$PROCESS_$SYSTEMATIC");
     std::cout << "Test2 \n ";
 /*    cb.cp().channel({chn}).process(SM_procs).ExtractShapes(
          input_dir[chn],
@@ -317,21 +301,31 @@ signal_types = {
     std::cout << "Test3 \n ";
     cb.cp().channel({chn}).process(signal_types["ggH"]).ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/mTi/histo_ggH_hww_$MASS_c10brn00",
-        "hww2l2v_13TeV_$BIN/mTi/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
     if (include_VBF){
     cb.cp().channel({chn}).process(signal_types["qqH"]).ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/mTi/histo_qqH_hww_$MASS_c10brn00",
-        "hww2l2v_13TeV_$BIN/mTi/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
+    }
+    cb.cp().channel({chn}).process(signal_types["ggH_SBI"]).ExtractShapes(
+        input_dir[chn],
+        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_SBI$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+    if (include_VBF){
+    cb.cp().channel({chn}).process(signal_types["qqH_SBI"]).ExtractShapes(
+        input_dir[chn],
+        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_SBI$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
     }
     std::cout << "Test4 \n ";
   }else if (chn == "ee" or chn == "mm"){
     std::cout << "Test5 \n ";
     cb.cp().channel({chn}).backgrounds().ExtractShapes(
         input_dir[chn],
-        "hwwhm_13TeV_$BIN/mTi/histo_$PROCESS",
-        "hwwhm_13TeV_$BIN/mTi/histo_$PROCESS_$SYSTEMATIC");
+        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_$PROCESS",
+        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_$PROCESS_$SYSTEMATIC");
     std::cout << "Test6 \n ";
 /*    cb.cp().channel({chn}).process(SM_procs).ExtractShapes(
          input_dir[chn],
@@ -340,13 +334,23 @@ signal_types = {
     std::cout << "Test7 \n ";
     cb.cp().channel({chn}).process(signal_types["ggH"]).ExtractShapes(
         input_dir[chn],
-        "hwwhm_13TeV_$BIN/mTi/histo_ggH_hww_$MASS_c10brn00",
-        "hwwhm_13TeV_$BIN/mTi/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
+        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_$MASS_c10brn00",
+        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
     if (include_VBF){
     cb.cp().channel({chn}).process(signal_types["qqH"]).ExtractShapes(
         input_dir[chn],
-        "hwwhm_13TeV_$BIN/mTi/histo_qqH_hww_$MASS_c10brn00",
-        "hwwhm_13TeV_$BIN/mTi/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
+        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_$MASS_c10brn00",
+        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
+    }
+    cb.cp().channel({chn}).process(signal_types["ggH_SBI"]).ExtractShapes(
+        input_dir[chn],
+        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_SBI$MASS_c10brn00",
+        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+    if (include_VBF){
+    cb.cp().channel({chn}).process(signal_types["qqH_SBI"]).ExtractShapes(
+        input_dir[chn],
+        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_SBI$MASS_c10brn00",
+        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
     }
     std::cout << "Test8 \n ";
    // cb.cp().channel({chn}).process(signal_types["bbH"]).ExtractShapes(
@@ -369,8 +373,10 @@ signal_types = {
     cb.AddProcesses(massesadd, {"hww"}, {"13TeV"}, {chn}, signal_types["ggH"], cats[chn+"_13TeV"], true);
     if (include_VBF){
     cb.AddProcesses(massesadd, {"hww"}, {"13TeV"}, {chn}, signal_types["qqH"], cats[chn+"_13TeV"], true);
-
-    cb.AddProcesses(massesadd, {"hww"}, {"13TeV"}, {chn}, signal_types["ggH_INT"], cats[chn+"_13TeV"], true);
+    }
+    cb.AddProcesses(massesadd, {"hww"}, {"13TeV"}, {chn}, signal_types["ggH_SBI"], cats[chn+"_13TeV"], true);
+    if (include_VBF){
+    cb.AddProcesses(massesadd, {"hww"}, {"13TeV"}, {chn}, signal_types["qqH_SBI"], cats[chn+"_13TeV"], true);
     }
     }
 
@@ -383,12 +389,11 @@ signal_types = {
   for (string chn:chns){
   if (chn == "dytt" or chn == "top"){
 
-  if (masscateg=="low"){
     std::cout << "Test1 \n ";
     cb.cp().channel({chn}).backgrounds().ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/ml_score_hww120_200/histo_$PROCESS",
-        "hww2l2v_13TeV_$BIN/ml_score_hww120_200/histo_$PROCESS_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_$PROCESS",
+        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_$PROCESS_$SYSTEMATIC");
     std::cout << "Test2 \n ";
 /*    cb.cp().channel({chn}).process(SM_procs).ExtractShapes(
          input_dir[chn],
@@ -397,74 +402,31 @@ signal_types = {
     std::cout << "Test3 \n ";
     cb.cp().channel({chn}).process(signal_types["ggH"]).ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/ml_score_hww120_200/histo_ggH_hww_$MASS_c10brn00",
-        "hww2l2v_13TeV_$BIN/ml_score_hww120_200/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
-  }else if (masscateg=="medium"){
-    std::cout << "Test1 \n ";
-    cb.cp().channel({chn}).backgrounds().ExtractShapes(
-        input_dir[chn],
-        "hww2l2v_13TeV_$BIN/ml_score_hww210_500/histo_$PROCESS",
-        "hww2l2v_13TeV_$BIN/ml_score_hww210_500/histo_$PROCESS_$SYSTEMATIC");
-    std::cout << "Test2 \n ";
-/*    cb.cp().channel({chn}).process(SM_procs).ExtractShapes(
-         input_dir[chn],
-         "hwwhm_13TeV_$BIN/mTi/histo_$PROCESS",
-         "hwwhm_13TeV_$BIN/mTi/histo_$PROCESS_$SYSTEMATIC");*/
-    std::cout << "Test3 \n ";
-    cb.cp().channel({chn}).process(signal_types["ggH"]).ExtractShapes(
-        input_dir[chn],
-        "hww2l2v_13TeV_$BIN/ml_score_hww210_500/histo_ggH_hww_$MASS_c10brn00",
-        "hww2l2v_13TeV_$BIN/ml_score_hww210_500/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
-  }else if (masscateg=="high"){
-    std::cout << "Test1 \n ";
-    cb.cp().channel({chn}).backgrounds().ExtractShapes(
-        input_dir[chn],
-        "hww2l2v_13TeV_$BIN/ml_score_hww550_3000/histo_$PROCESS",
-        "hww2l2v_13TeV_$BIN/ml_score_hww550_3000/histo_$PROCESS_$SYSTEMATIC");
-    std::cout << "Test2 \n ";
-/*    cb.cp().channel({chn}).process(SM_procs).ExtractShapes(
-         input_dir[chn],
-         "hwwhm_13TeV_$BIN/mTi/histo_$PROCESS",
-         "hwwhm_13TeV_$BIN/mTi/histo_$PROCESS_$SYSTEMATIC");*/
-    std::cout << "Test3 \n ";
-    cb.cp().channel({chn}).process(signal_types["ggH"]).ExtractShapes(
-        input_dir[chn],
-        "hww2l2v_13TeV_$BIN/ml_score_hww550_3000/histo_ggH_hww_$MASS_c10brn00",
-        "hww2l2v_13TeV_$BIN/ml_score_hww550_3000/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
-  }else{
-    std::cout << "Test1 \n ";
-    cb.cp().channel({chn}).backgrounds().ExtractShapes(
-        input_dir[chn],
-        "hww2l2v_13TeV_$BIN/mTi/histo_$PROCESS",
-        "hww2l2v_13TeV_$BIN/mTi/histo_$PROCESS_$SYSTEMATIC");
-    std::cout << "Test2 \n ";
-/*    cb.cp().channel({chn}).process(SM_procs).ExtractShapes(
-         input_dir[chn],
-         "hwwhm_13TeV_$BIN/mTi/histo_$PROCESS",
-         "hwwhm_13TeV_$BIN/mTi/histo_$PROCESS_$SYSTEMATIC");*/
-    std::cout << "Test3 \n ";
-    cb.cp().channel({chn}).process(signal_types["ggH"]).ExtractShapes(
-        input_dir[chn],
-        "hww2l2v_13TeV_$BIN/mTi/histo_ggH_hww_$MASS_c10brn00",
-        "hww2l2v_13TeV_$BIN/mTi/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
-  }
-
-
+        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
     if (include_VBF){
     cb.cp().channel({chn}).process(signal_types["qqH"]).ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/mTi/histo_qqH_hww_$MASS_c10brn00",
-        "hww2l2v_13TeV_$BIN/mTi/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
+    }
+    cb.cp().channel({chn}).process(signal_types["ggH_SBI"]).ExtractShapes(
+        input_dir[chn],
+        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_SBI$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+    if (include_VBF){
+    cb.cp().channel({chn}).process(signal_types["qqH_SBI"]).ExtractShapes(
+        input_dir[chn],
+        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_SBI$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
     }
     std::cout << "Test4 \n ";
   }else if (chn == "em"){
     std::cout << "Test5 \n ";
-
-  if (masscateg=="low"){
     cb.cp().channel({chn}).backgrounds().ExtractShapes(
         input_dir[chn],
-        "hwwhm_low_13TeV_$BIN/ml_score_hww120_200/histo_$PROCESS",
-        "hwwhm_low_13TeV_$BIN/ml_score_hww120_200/histo_$PROCESS_$SYSTEMATIC");
+        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_$PROCESS",
+        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_$PROCESS_$SYSTEMATIC");
     std::cout << "Test6 \n ";
 /*    cb.cp().channel({chn}).process(SM_procs).ExtractShapes(
          input_dir[chn],
@@ -473,61 +435,24 @@ signal_types = {
     std::cout << "Test7 \n ";
     cb.cp().channel({chn}).process(signal_types["ggH"]).ExtractShapes(
         input_dir[chn],
-        "hwwhm_low_13TeV_$BIN/ml_score_hww120_200/histo_ggH_hww_$MASS_c10brn00",
-        "hwwhm_low_13TeV_$BIN/ml_score_hww120_200/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
-  }else if (masscateg=="medium"){
-    cb.cp().channel({chn}).backgrounds().ExtractShapes(
-        input_dir[chn],
-        "hwwhm_medium_13TeV_$BIN/ml_score_hww210_500/histo_$PROCESS",
-        "hwwhm_medium_13TeV_$BIN/ml_score_hww210_500/histo_$PROCESS_$SYSTEMATIC");
-    std::cout << "Test6 \n ";
-/*    cb.cp().channel({chn}).process(SM_procs).ExtractShapes(
-         input_dir[chn],
-         "hwwhm_13TeV_$BIN/mTi/histo_$PROCESS",
-         "hwwhm_13TeV_$BIN/mTi/histo_$PROCESS_$SYSTEMATIC");*/
-    std::cout << "Test7 \n ";
-    cb.cp().channel({chn}).process(signal_types["ggH"]).ExtractShapes(
-        input_dir[chn],
-        "hwwhm_medium_13TeV_$BIN/ml_score_hww210_500/histo_ggH_hww_$MASS_c10brn00",
-        "hwwhm_medium_13TeV_$BIN/ml_score_hww210_500/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
-  }else if (masscateg=="high"){
-    cb.cp().channel({chn}).backgrounds().ExtractShapes(
-        input_dir[chn],
-        "hwwhm_high_13TeV_$BIN/ml_score_hww550_3000/histo_$PROCESS",
-        "hwwhm_high_13TeV_$BIN/ml_score_hww550_3000/histo_$PROCESS_$SYSTEMATIC");
-    std::cout << "Test6 \n ";
-/*    cb.cp().channel({chn}).process(SM_procs).ExtractShapes(
-         input_dir[chn],
-         "hwwhm_13TeV_$BIN/mTi/histo_$PROCESS",
-         "hwwhm_13TeV_$BIN/mTi/histo_$PROCESS_$SYSTEMATIC");*/
-    std::cout << "Test7 \n ";
-    cb.cp().channel({chn}).process(signal_types["ggH"]).ExtractShapes(
-        input_dir[chn],
-        "hwwhm_high_13TeV_$BIN/ml_score_hww550_3000/histo_ggH_hww_$MASS_c10brn00",
-        "hwwhm_high_13TeV_$BIN/ml_score_hww550_3000/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
-  }else{
-    cb.cp().channel({chn}).backgrounds().ExtractShapes(
-        input_dir[chn],
-        "hwwhm_13TeV_$BIN/mTi/histo_$PROCESS",
-        "hwwhm_13TeV_$BIN/mTi/histo_$PROCESS_$SYSTEMATIC");
-    std::cout << "Test6 \n ";
-/*    cb.cp().channel({chn}).process(SM_procs).ExtractShapes(
-         input_dir[chn],
-         "hwwhm_13TeV_$BIN/mTi/histo_$PROCESS",
-         "hwwhm_13TeV_$BIN/mTi/histo_$PROCESS_$SYSTEMATIC");*/
-    std::cout << "Test7 \n ";
-    cb.cp().channel({chn}).process(signal_types["ggH"]).ExtractShapes(
-        input_dir[chn],
-        "hwwhm_13TeV_$BIN/mTi/histo_ggH_hww_$MASS_c10brn00",
-        "hwwhm_13TeV_$BIN/mTi/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
-  }
-
+        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_$MASS_c10brn00",
+        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
     if (include_VBF){
     cb.cp().channel({chn}).process(signal_types["qqH"]).ExtractShapes(
         input_dir[chn],
-        "hwwhm_13TeV_$BIN/mTi/histo_qqH_hww_$MASS_c10brn00",
-        "hwwhm_13TeV_$BIN/mTi/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
+        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_$MASS_c10brn00",
+        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
     }
+    cb.cp().channel({chn}).process(signal_types["ggH_SBI"]).ExtractShapes(
+        input_dir[chn],
+        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_SBI$MASS_c10brn00",
+        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+    if (include_VBF){
+    cb.cp().channel({chn}).process(signal_types["qqH_SBI"]).ExtractShapes(
+        input_dir[chn],
+        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_SBI$MASS_c10brn00",
+        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+     }
     std::cout << "Test8 \n ";
    // cb.cp().channel({chn}).process(signal_types["bbH"]).ExtractShapes(
    //     input_dir[chn] + "hww_"+chn+".inputs-mssm-13TeV"+postfix+".root",
@@ -767,12 +692,12 @@ signal_types = {
 
   bool do_morphing = true;
   map<string, RooAbsReal *> mass_var = {
-    {"ggH_HWW", &mH}, {"qqH_HWW", &mH}, {"ggH_INTHWW", &mH}//,
+    {"ggH_HWW", &mH}, {"qqH_HWW", &mH}, {"ggH_SBIHWW", &mH}, {"qqH_SBIHWW", &mH}//,
     //{"bbh_htautau", &mh}, {"bbH_Htautau", &mH}, {"bbA_Atautau", &mA}
   };
   if (!include_VBF){
 mass_var = {
-    {"ggH_HWW", &mH} };
+    {"ggH_HWW", &mH},{"ggH_SBIHWW", &mH}  };
   }
 /*  if(mass=="MH"){
     mass_var = {
@@ -784,9 +709,9 @@ mass_var = {
     auto bins = cb.bin_set();
     for (auto b : bins) {
       std::cout << "Bin:" << b << "\n";
-      auto procs = cb.cp().bin({b}).process(ch::JoinStr({signal_types["ggH"], signal_types["qqH"], signal_types["ggH_INT"]})).process_set();//, signal_types["bbH"]
+      auto procs = cb.cp().bin({b}).process(ch::JoinStr({signal_types["ggH"], signal_types["qqH"], signal_types["ggH_SBI"], signal_types["qqH_SBI"]})).process_set();//, signal_types["bbH"]
     if (!include_VBF){
-      procs = cb.cp().bin({b}).process(ch::JoinStr({signal_types["ggH"]})).process_set();
+      procs = cb.cp().bin({b}).process(ch::JoinStr({signal_types["ggH"], signal_types["ggH_SBI"]})).process_set();
     }
       for (auto p : procs) {
         std::cout << "Process:" << p << "\n";
@@ -797,14 +722,16 @@ mass_var = {
   }
   demo.Close();
   cb.AddWorkspace(ws);
+  if (do_morphing) {
   if (include_VBF){
-  cb.cp().process(ch::JoinStr({signal_types["ggH"], signal_types["qqH"], signal_types["ggH_INT"]})).ExtractPdfs(cb, "hww", "$BIN_$PROCESS_morph");//, signal_types["bbH"]
+  cb.cp().process(ch::JoinStr({signal_types["ggH"], signal_types["qqH"], signal_types["ggH_SBI"], signal_types["qqH_SBI"]})).ExtractPdfs(cb, "hww", "$BIN_$PROCESS_morph");//, signal_types["bbH"]
   }else{
-  cb.cp().process(ch::JoinStr({signal_types["ggH"]})).ExtractPdfs(cb, "hww", "$BIN_$PROCESS_morph");//, signal_types["bbH"]
+  cb.cp().process(ch::JoinStr({signal_types["ggH"], signal_types["ggH_SBI"]})).ExtractPdfs(cb, "hww", "$BIN_$PROCESS_morph");//, signal_types["bbH"]
+  }
   }
   cb.PrintAll();
 
-  output_folder += masscateg;
+
  //Write out datacards. Naming convention important for rest of workflow. We
  //make one directory per chn-cat, one per chn and cmb. In this code we only
  //store the individual datacards for each directory to be combined later, but
