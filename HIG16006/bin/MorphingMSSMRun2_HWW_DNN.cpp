@@ -139,15 +139,15 @@ int main(int argc, char** argv) {
 
   map<string, VString> bkg_procs;
   bkg_procs["em"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};//{"ggWW", "Vg", "VVV", "top", "Fake", "WW", "DY", "VZ", "VgS"};
-  bkg_procs["dytt"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};//, "WW2J", "qqWWqq"
+  bkg_procs["dytt"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
   bkg_procs["top"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
   if (include_SF){
   bkg_procs["ee"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
   bkg_procs["eedytt"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
   bkg_procs["eetop"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
-  bkg_procs["mm"] = {"WW", "DY", "VVV", "top", "Fake", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};//"ggWW",
-  bkg_procs["mmdytt"] = {"WW", "DY", "VVV", "top", "Fake", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};//"ggWW",
-  bkg_procs["mmtop"] = {"WW", "DY", "VVV", "top", "Fake", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};//"ggWW",
+  bkg_procs["mm"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
+  bkg_procs["mmdytt"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
+  bkg_procs["mmtop"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
   }
 
   VString SM_procs = {"WH_hww", "ZH_hww", "ggZH_hww", "ggH_hww", "qqH_hww", "H_htt"};//{"ggH_hww_SM125", "qqH_hww_SM125", "ZH_hww_SM125", "ggZH_hww_SM125","WH_hww_SM125","bbH_hww_SM125"};
@@ -175,22 +175,22 @@ int main(int argc, char** argv) {
   map<string,Categories> cats;
   if (include_VBF){
   cats["em_13TeV"] = {
-    {8, "of_0j"},
-    {9, "of_1j"},
+    {8, "of0j"},
+    {9, "of1j"},
     {10, "of2j"},
-    {11, "of_VBF"}//"of2j_vbf"
+    {11, "ofVBF"}//"of2j_vbf"
     };
   cats["dytt_13TeV"] = {
-    {8, "dytt_of0j"},
-    {9, "dytt_of1j"},
-    {10, "dytt_of2j"},
-    {11, "dytt_of2j_vbf"}//"of2j_vbf"
+    {8, "dy_of0j"},
+    {9, "dy_of1j"},
+    {10, "dy_of2j"},
+    {11, "dy_ofVBF"}//"of2j_vbf"
     };
   cats["top_13TeV"] = {
     {8, "top_of0j"},
     {9, "top_of1j"},
     {10, "top_of2j"},
-    {11, "top_VBF"}//"of2j_vbf"
+    {11, "top_ofVBF"}//"of2j_vbf"
     };
   }else{
   cats["em_13TeV"] = {
@@ -291,8 +291,8 @@ signal_types = {
     std::cout << "Test1 \n ";
     cb.cp().channel({chn}).backgrounds().ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_$PROCESS",
-        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_$PROCESS_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/events/histo_$PROCESS",
+        "hww2l2v_13TeV_$BIN/events/histo_$PROCESS_$SYSTEMATIC");
     std::cout << "Test2 \n ";
 /*    cb.cp().channel({chn}).process(SM_procs).ExtractShapes(
          input_dir[chn],
@@ -301,31 +301,31 @@ signal_types = {
     std::cout << "Test3 \n ";
     cb.cp().channel({chn}).process(signal_types["ggH"]).ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_$MASS_c10brn00",
-        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/events/histo_ggH_hww_$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/events/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
     if (include_VBF){
     cb.cp().channel({chn}).process(signal_types["qqH"]).ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_$MASS_c10brn00",
-        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/events/histo_qqH_hww_$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/events/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
     }
     cb.cp().channel({chn}).process(signal_types["ggH_SBI"]).ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_SBI$MASS_c10brn00",
-        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/events/histo_ggH_hww_SBI$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/events/histo_ggH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
     if (include_VBF){
     cb.cp().channel({chn}).process(signal_types["qqH_SBI"]).ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_SBI$MASS_c10brn00",
-        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/events/histo_qqH_hww_SBI$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/events/histo_qqH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
     }
     std::cout << "Test4 \n ";
   }else if (chn == "ee" or chn == "mm"){
     std::cout << "Test5 \n ";
     cb.cp().channel({chn}).backgrounds().ExtractShapes(
         input_dir[chn],
-        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_$PROCESS",
-        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_$PROCESS_$SYSTEMATIC");
+        "hwwhm_13TeV_$BIN/ml_max_score/histo_$PROCESS",
+        "hwwhm_13TeV_$BIN/ml_max_score/histo_$PROCESS_$SYSTEMATIC");
     std::cout << "Test6 \n ";
 /*    cb.cp().channel({chn}).process(SM_procs).ExtractShapes(
          input_dir[chn],
@@ -334,23 +334,23 @@ signal_types = {
     std::cout << "Test7 \n ";
     cb.cp().channel({chn}).process(signal_types["ggH"]).ExtractShapes(
         input_dir[chn],
-        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_$MASS_c10brn00",
-        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
+        "hwwhm_13TeV_$BIN/ml_max_score/histo_ggH_hww_$MASS_c10brn00",
+        "hwwhm_13TeV_$BIN/ml_max_score/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
     if (include_VBF){
     cb.cp().channel({chn}).process(signal_types["qqH"]).ExtractShapes(
         input_dir[chn],
-        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_$MASS_c10brn00",
-        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
+        "hwwhm_13TeV_$BIN/ml_max_score/histo_qqH_hww_$MASS_c10brn00",
+        "hwwhm_13TeV_$BIN/ml_max_score/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
     }
     cb.cp().channel({chn}).process(signal_types["ggH_SBI"]).ExtractShapes(
         input_dir[chn],
-        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_SBI$MASS_c10brn00",
-        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+        "hwwhm_13TeV_$BIN/ml_max_score/histo_ggH_hww_SBI$MASS_c10brn00",
+        "hwwhm_13TeV_$BIN/ml_max_score/histo_ggH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
     if (include_VBF){
     cb.cp().channel({chn}).process(signal_types["qqH_SBI"]).ExtractShapes(
         input_dir[chn],
-        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_SBI$MASS_c10brn00",
-        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+        "hwwhm_13TeV_$BIN/ml_max_score/histo_qqH_hww_SBI$MASS_c10brn00",
+        "hwwhm_13TeV_$BIN/ml_max_score/histo_qqH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
     }
     std::cout << "Test8 \n ";
    // cb.cp().channel({chn}).process(signal_types["bbH"]).ExtractShapes(
@@ -392,8 +392,8 @@ signal_types = {
     std::cout << "Test1 \n ";
     cb.cp().channel({chn}).backgrounds().ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_$PROCESS",
-        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_$PROCESS_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/events/histo_$PROCESS",
+        "hww2l2v_13TeV_$BIN/events/histo_$PROCESS_$SYSTEMATIC");
     std::cout << "Test2 \n ";
 /*    cb.cp().channel({chn}).process(SM_procs).ExtractShapes(
          input_dir[chn],
@@ -402,31 +402,31 @@ signal_types = {
     std::cout << "Test3 \n ";
     cb.cp().channel({chn}).process(signal_types["ggH"]).ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_$MASS_c10brn00",
-        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/events/histo_ggH_hww_$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/events/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
     if (include_VBF){
     cb.cp().channel({chn}).process(signal_types["qqH"]).ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_$MASS_c10brn00",
-        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/events/histo_qqH_hww_$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/events/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
     }
     cb.cp().channel({chn}).process(signal_types["ggH_SBI"]).ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_SBI$MASS_c10brn00",
-        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/events/histo_ggH_hww_SBI$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/events/histo_ggH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
     if (include_VBF){
     cb.cp().channel({chn}).process(signal_types["qqH_SBI"]).ExtractShapes(
         input_dir[chn],
-        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_SBI$MASS_c10brn00",
-        "hww2l2v_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+        "hww2l2v_13TeV_$BIN/events/histo_qqH_hww_SBI$MASS_c10brn00",
+        "hww2l2v_13TeV_$BIN/events/histo_qqH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
     }
     std::cout << "Test4 \n ";
   }else if (chn == "em"){
     std::cout << "Test5 \n ";
     cb.cp().channel({chn}).backgrounds().ExtractShapes(
         input_dir[chn],
-        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_$PROCESS",
-        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_$PROCESS_$SYSTEMATIC");
+        "hwwhm_13TeV_$BIN/ml_max_score/histo_$PROCESS",
+        "hwwhm_13TeV_$BIN/ml_max_score/histo_$PROCESS_$SYSTEMATIC");
     std::cout << "Test6 \n ";
 /*    cb.cp().channel({chn}).process(SM_procs).ExtractShapes(
          input_dir[chn],
@@ -435,23 +435,23 @@ signal_types = {
     std::cout << "Test7 \n ";
     cb.cp().channel({chn}).process(signal_types["ggH"]).ExtractShapes(
         input_dir[chn],
-        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_$MASS_c10brn00",
-        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
+        "hwwhm_13TeV_$BIN/ml_max_score/histo_ggH_hww_$MASS_c10brn00",
+        "hwwhm_13TeV_$BIN/ml_max_score/histo_ggH_hww_$MASS_c10brn00_$SYSTEMATIC");
     if (include_VBF){
     cb.cp().channel({chn}).process(signal_types["qqH"]).ExtractShapes(
         input_dir[chn],
-        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_$MASS_c10brn00",
-        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
+        "hwwhm_13TeV_$BIN/ml_max_score/histo_qqH_hww_$MASS_c10brn00",
+        "hwwhm_13TeV_$BIN/ml_max_score/histo_qqH_hww_$MASS_c10brn00_$SYSTEMATIC");
     }
     cb.cp().channel({chn}).process(signal_types["ggH_SBI"]).ExtractShapes(
         input_dir[chn],
-        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_SBI$MASS_c10brn00",
-        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_ggH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+        "hwwhm_13TeV_$BIN/ml_max_score/histo_ggH_hww_SBI$MASS_c10brn00",
+        "hwwhm_13TeV_$BIN/ml_max_score/histo_ggH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
     if (include_VBF){
     cb.cp().channel({chn}).process(signal_types["qqH_SBI"]).ExtractShapes(
         input_dir[chn],
-        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_SBI$MASS_c10brn00",
-        "hwwhm_13TeV_$BIN/ml_score_max_score/histo_qqH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
+        "hwwhm_13TeV_$BIN/ml_max_score/histo_qqH_hww_SBI$MASS_c10brn00",
+        "hwwhm_13TeV_$BIN/ml_max_score/histo_qqH_hww_SBI$MASS_c10brn00_$SYSTEMATIC");
      }
     std::cout << "Test8 \n ";
    // cb.cp().channel({chn}).process(signal_types["bbH"]).ExtractShapes(
@@ -472,7 +472,7 @@ signal_types = {
 
  //Now delete processes with 0 yield
  cb.FilterProcs([&](ch::Process *p) {
-  bool null_yield = !(p->rate() > 0. || BinIsControlRegion(p));
+  bool null_yield = !(p->rate() > 0.);// || BinIsControlRegion(p)
   if (null_yield){
      std::cout << "[Null yield] Removing process with null yield: \n ";
      std::cout << ch::Process::PrintHeader << *p << "\n"; 
@@ -632,9 +632,9 @@ signal_types = {
     if (ch::HasNegativeBins(s->shape_u()) || ch::HasNegativeBins(s->shape_d())) {
       std::cout << "[Negative bins] Fixing negative bins for syst" << s->bin()
                 << "," << s->process() << "," << s->name() << "\n";
-      // std::cout << "[Negative bins] Before:\n";
-      // s->shape_u()->Print("range");
-      // s->shape_d()->Print("range");
+       std::cout << "[Negative bins] Before:\n";
+       s->shape_u()->Print("range");
+       s->shape_d()->Print("range");
       auto newhist_u = s->ClonedShapeU();
       auto newhist_d = s->ClonedShapeD();
       ch::ZeroNegativeBins(newhist_u.get());
@@ -642,9 +642,9 @@ signal_types = {
       // Set the new shape but do not change the rate, we want the rate to still
       // reflect the total integral of the events
       s->set_shapes(std::move(newhist_u), std::move(newhist_d), nullptr);
-      // std::cout << "[Negative bins] After:\n";
-      // s->shape_u()->Print("range");
-      // s->shape_d()->Print("range");
+       std::cout << "[Negative bins] After:\n";
+       s->shape_u()->Print("range");
+       s->shape_d()->Print("range");
     }
   });
 
@@ -658,7 +658,7 @@ signal_types = {
     .SetPoissonErrors(poisson_bbb);
   for (auto chn : chns) {
     std::cout << " - Doing bbb for channel " << chn << "\n";
-    bbb.MergeAndAdd(cb.cp().channel({chn}).process({"ZTT", "QCD", "W", "ZJ", "ZL", "TT", "VV", "Ztt", "ttbar", "EWK", "Fakes", "ZMM", "TTJ", "WJets", "Dibosons"}).FilterAll([](ch::Object const* obj) {
+    bbb.MergeAndAdd(cb.cp().channel({chn}).process({"WW", "DY", "VVV", "top", "FakeOF", "FakeSF", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"}).FilterAll([](ch::Object const* obj) {
                 return BinIsControlRegion(obj);
                 }), cb);
   }

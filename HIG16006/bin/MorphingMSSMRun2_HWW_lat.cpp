@@ -97,16 +97,16 @@ int main(int argc, char** argv) {
   typedef vector<string> VString;
   typedef vector<pair<int, string>> Categories;
   std::map<string, string> input_dir;
-  input_dir["em"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_OF_V2.root";
-  input_dir["dytt"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_OF_V2.root";
-  input_dir["top"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_OF_V2.root";
+  input_dir["em"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_OF_V4.root";
+  input_dir["dytt"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_OF_V4.root";
+  input_dir["top"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_OF_V4.root";
   if (include_SF){
-  input_dir["ee"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_ee_VBF_V2.root";
-  input_dir["eedytt"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_ee_VBF_V2.root";
-  input_dir["eetop"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_ee_VBF_V2.root";
-  input_dir["mm"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_mm_VBF_V2.root";
-  input_dir["mmdytt"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_mm_VBF_V2.root";
-  input_dir["mmtop"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_mm_VBF_V2.root";
+  input_dir["ee"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_ee_VBF_V5.root";
+  input_dir["eedytt"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_ee_VBF_V5.root";
+  input_dir["eetop"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_ee_VBF_V5.root";
+  input_dir["mm"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_mm_VBF_V5.root";
+  input_dir["mmdytt"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_mm_VBF_V5.root";
+  input_dir["mmtop"]  = string(getenv("CMSSW_BASE")) + "/src/CombineHarvester/HIG16006/plots_HWWhighMass2016_SF_embeddedWeights_mm_VBF_V5.root";
   }
 
   VString chns =
@@ -138,16 +138,16 @@ int main(int argc, char** argv) {
   //RooRealVar mh("mh", "mh", 90., 3200.);
 
   map<string, VString> bkg_procs;
-  bkg_procs["em"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};//{"ggWW", "Vg", "VVV", "top", "Fake", "WW", "DY", "VZ", "VgS"};
-  bkg_procs["dytt"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
-  bkg_procs["top"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
+  bkg_procs["em"] = {"WW", "DY", "VVV", "top", "FakeOF", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};//{"ggWW", "Vg", "VVV", "top", "Fake", "WW", "DY", "VZ", "VgS"};
+  bkg_procs["dytt"] = {"WW", "DY", "VVV", "top", "FakeOF", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
+  bkg_procs["top"] = {"WW", "DY", "VVV", "top", "FakeOF", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
   if (include_SF){
-  bkg_procs["ee"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
-  bkg_procs["eedytt"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
-  bkg_procs["eetop"] = {"WW", "DY", "VVV", "top", "Fake", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
-  bkg_procs["mm"] = {"WW", "DY", "VVV", "top", "Fake", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};//"ggWW",
-  bkg_procs["mmdytt"] = {"WW", "DY", "VVV", "top", "Fake", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};//"ggWW",
-  bkg_procs["mmtop"] = {"WW", "DY", "VVV", "top", "Fake", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};//"ggWW",
+  bkg_procs["ee"] = {"WW", "DY", "VVV", "top", "FakeSF", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
+  bkg_procs["eedytt"] = {"WW", "DY", "VVV", "top", "FakeSF", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
+  bkg_procs["eetop"] = {"WW", "DY", "VVV", "top", "FakeSF", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
+  bkg_procs["mm"] = {"WW", "DY", "VVV", "top", "FakeSF", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
+  bkg_procs["mmdytt"] = {"WW", "DY", "VVV", "top", "FakeSF", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
+  bkg_procs["mmtop"] = {"WW", "DY", "VVV", "top", "FakeSF", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"};
   }
 
   VString SM_procs = {"WH_hww", "ZH_hww", "ggZH_hww", "ggH_hww", "qqH_hww", "H_htt"};//{"ggH_hww_SM125", "qqH_hww_SM125", "ZH_hww_SM125", "ggZH_hww_SM125","WH_hww_SM125","bbH_hww_SM125"};
@@ -175,22 +175,22 @@ int main(int argc, char** argv) {
   map<string,Categories> cats;
   if (include_VBF){
   cats["em_13TeV"] = {
-    {8, "of_0j"},
-    {9, "of_1j"},
+    {8, "of0j"},
+    {9, "of1j"},
     {10, "of2j"},
-    {11, "of_VBF"}//"of2j_vbf"
+    {11, "ofVBF"}//"of2j_vbf"
     };
   cats["dytt_13TeV"] = {
-    {8, "dytt_of0j"},
-    {9, "dytt_of1j"},
-    {10, "dytt_of2j"},
-    {11, "dytt_of2j_vbf"}//"of2j_vbf"
+    {8, "dy_of0j"},
+    {9, "dy_of1j"},
+    {10, "dy_of2j"},
+    {11, "dy_ofVBF"}//"of2j_vbf"
     };
   cats["top_13TeV"] = {
     {8, "top_of0j"},
     {9, "top_of1j"},
     {10, "top_of2j"},
-    {11, "top_VBF"}//"of2j_vbf"
+    {11, "top_ofVBF"}//"of2j_vbf"
     };
   }else{
   cats["em_13TeV"] = {
@@ -211,22 +211,22 @@ int main(int argc, char** argv) {
   }
   if (include_SF){
   cats["ee_13TeV"] = {
-    {11, "e_e_2j_VBF"}
+    {11, "sfVBF_ee"}
     };
   cats["eedytt_13TeV"] = {
-    {11, "dy_e_e_2j_VBF"}
+    {11, "dy_sfVBF_ee"}
     };
   cats["eetop_13TeV"] = {
-    {11, "top_e_e_2j_VBF"}
+    {11, "top_sfVBF_ee"}
     };
   cats["mm_13TeV"] = {
-    {11, "mu_mu_2j_VBF"}
+    {11, "sfVBF_mm"}
     };
   cats["mmdytt_13TeV"] = {
-    {11, "dy_mu_mu_2j_VBF"}
+    {11, "dy_sfVBF_mm"}
     };
   cats["mmtop_13TeV"] = {
-    {11, "top_mu_mu_2j_VBF"}
+    {11, "top_sfVBF_mm"}
     };
   }
 
@@ -658,7 +658,7 @@ signal_types = {
     .SetPoissonErrors(poisson_bbb);
   for (auto chn : chns) {
     std::cout << " - Doing bbb for channel " << chn << "\n";
-    bbb.MergeAndAdd(cb.cp().channel({chn}).process({"ZTT", "QCD", "W", "ZJ", "ZL", "TT", "VV", "Ztt", "ttbar", "EWK", "Fakes", "ZMM", "TTJ", "WJets", "Dibosons"}).FilterAll([](ch::Object const* obj) {
+    bbb.MergeAndAdd(cb.cp().channel({chn}).process({"WW", "DY", "VVV", "top", "FakeOF", "FakeSF", "ggWW", "VZ", "Vg", "VgS", "WW2J", "qqWWqq"}).FilterAll([](ch::Object const* obj) {
                 return BinIsControlRegion(obj);
                 }), cb);
   }
