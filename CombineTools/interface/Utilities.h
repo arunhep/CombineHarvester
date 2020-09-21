@@ -166,7 +166,15 @@ std::vector<std::string> ValsFromRange(std::string const& input,
 
 bool HasNegativeBins(TH1 const* h);
 
+bool HasAlmostNegativeBins(TH1 const* h);
+
+bool IsCompletelyZero(TH1 const* h);
+
+void SymmetrizeSystematic(TH1 const *hnom, TH1 *hsysgood, TH1 *hsysbad);
+
 void ZeroNegativeBins(TH1 *h);
+
+void ZeroAlmostNegativeBins(TH1 *h);
 
 // ---------------------------------------------------------------------------
 // Tuple Printing
