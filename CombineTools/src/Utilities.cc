@@ -346,10 +346,46 @@ bool HasNegativeBins(TH1 const* h) {
   return has_negative;
 }
 
+bool HasAlmostNegativeBins(TH1 const* h) {
+  bool has_negative = false;
+  for (int i = 1; i <= h->GetNbinsX(); ++i) {
+    if (h->GetBinContent(i) < 1E-9) {
+      has_negative = true;
+    }
+  }
+  return has_negative;
+}
+
+bool IsCompletelyZero(TH1 const* h) {
+  double content = 0.0;
+  for (int i = 1; i <= h->GetNbinsX(); ++i) {
+    content = content + h->GetBinContent(i);
+  }
+  bool itszero = false;
+  if (content <= 0.0){itszero = true;}
+  return itszero;
+}
+
+void SymmetrizeSystematic(TH1 const *hnom, TH1 *hsysgood, TH1 *hsysbad) {
+  for (int i = 1; i <= hnom->GetNbinsX(); ++i) {
+    //std::cout << "Bin " << i << " : Nom " << hnom->GetBinContent(i) << ", Good " << hsysgood->GetBinContent(i) << ", Bad " << hsysbad->GetBinContent(i) << std::endl;
+    //std::cout << "New Bin Content will be " << hnom->GetBinContent(i) + (hnom->GetBinContent(i) - hsysgood->GetBinContent(i)) << std::endl;
+    hsysbad->SetBinContent(i, hnom->GetBinContent(i) + (hnom->GetBinContent(i) - hsysgood->GetBinContent(i)));
+  }
+}
+
 void ZeroNegativeBins(TH1 *h) {
   for (int i = 1; i <= h->GetNbinsX(); ++i) {
     if (h->GetBinContent(i) < 0.) {
       h->SetBinContent(i, 0.);
+    }
+  }
+}
+
+void ZeroAlmostNegativeBins(TH1 *h) {
+  for (int i = 1; i <= h->GetNbinsX(); ++i) {
+    if (h->GetBinContent(i) < 1E-9) {
+      h->SetBinContent(i, 1E-9);
     }
   }
 }
