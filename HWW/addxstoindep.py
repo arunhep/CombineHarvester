@@ -11,11 +11,18 @@ import os
 #OnlyMakeSMGraph = 0 # Set 0 only for indepSM
 #gghonly=0
 #vbfonly=0
-folder = sys.argv[1]
+#folder = sys.argv[1]
+OnlyMakeSMGraph = 0
+gghonly = 0
+vbfonly = 0
+semilep = 0
+'''
+print "Options:","OnlyMakeSMGraph =",OnlyMakeSMGraph,";","gghonly = ",gghonly,";","vbfonly = ",vbfonly,";","semilep = ",semilep
 OnlyMakeSMGraph = 0 if "SM" in folder else 1
 gghonly = 1 if "ggH" in folder else 0
 vbfonly = 1 if "VBF" in folder else 0
 semilep = 1 if "emi" in folder else 0
+'''
 print "Options:","OnlyMakeSMGraph =",OnlyMakeSMGraph,";","gghonly = ",gghonly,";","vbfonly = ",vbfonly,";","semilep = ",semilep
 
 
@@ -56,13 +63,16 @@ def RedoLists(masses, process):
   return xlist
 
 
-if not os.path.isfile('/afs/cern.ch/work/d/dmroy/CMSSW_10_2_13/src/CombineHarvester/MSSMFull2016/'+folder+'/indep.json'):
+#if not os.path.isfile('/afs/cern.ch/work/d/dmroy/CMSSW_10_2_13/src/CombineHarvester/MSSMFull2016/'+folder+'/indep.json'):
+if not os.path.isfile('/afs/cern.ch/work/a/arun/Latinos/Check_forCC7/highmass_datacards/CMSSW_10_2_13/src/CombineHarvester/HWW/indep.json'):
   os.system('pushd '+folder+' ; combineTool.py -M CollectLimits -i higgsCombine.Test.Asymptotic*.root -o indep.json ; popd')
 
-file = open('/afs/cern.ch/work/d/dmroy/CMSSW_10_2_13/src/CombineHarvester/MSSMFull2016/'+folder+'/indep.json')
+#file = open('/afs/cern.ch/work/d/dmroy/CMSSW_10_2_13/src/CombineHarvester/MSSMFull2016/'+folder+'/indep.json')
+file = open('/afs/cern.ch/work/a/arun/Latinos/Check_forCC7/highmass_datacards/CMSSW_10_2_13/src/CombineHarvester/HWW/indep.json')
 json_data = json.load(file)
 file.close()
-file = open('/afs/cern.ch/work/d/dmroy/CMSSW_10_2_13/src/CombineHarvester/MSSMFull2016/'+folder+'/indep.json')
+#file = open('/afs/cern.ch/work/d/dmroy/CMSSW_10_2_13/src/CombineHarvester/MSSMFull2016/'+folder+'/indep.json')
+file = open('/afs/cern.ch/work/a/arun/Latinos/Check_forCC7/highmass_datacards/CMSSW_10_2_13/src/CombineHarvester/HWW/indep.json')
 json_data_SM = json.load(file)
 file.close()
 
@@ -226,10 +236,12 @@ for mass in removethese:
 
 #with ('/afs/cern.ch/work/d/dmroy/CMSSW_7_4_7/src/CombineHarvester/HIG16006/output/indep.json', 'w') as file:
 #if not OnlyMakeSMGraph:
-file = open('/afs/cern.ch/work/d/dmroy/CMSSW_10_2_13/src/CombineHarvester/MSSMFull2016/'+folder+'/indep.json','w')
+#file = open('/afs/cern.ch/work/d/dmroy/CMSSW_10_2_13/src/CombineHarvester/MSSMFull2016/'+folder+'/indep.json','w')
+file = open('/afs/cern.ch/work/a/arun/Latinos/Check_forCC7/highmass_datacards/CMSSW_10_2_13/src/CombineHarvester/HWW/indep.json','w')
 json.dump(json_data, file)
 file.close()
-fileSM = open('/afs/cern.ch/work/d/dmroy/CMSSW_10_2_13/src/CombineHarvester/MSSMFull2016/'+folder+'/indepSM.json','w')
+#fileSM = open('/afs/cern.ch/work/d/dmroy/CMSSW_10_2_13/src/CombineHarvester/MSSMFull2016/'+folder+'/indepSM.json','w')
+fileSM = open('/afs/cern.ch/work/a/arun/Latinos/Check_forCC7/highmass_datacards/CMSSW_10_2_13/src/CombineHarvester/HWW/indepSM.json','w')
 json.dump(json_data_SM, fileSM)
 fileSM.close()
 

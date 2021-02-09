@@ -42,10 +42,17 @@ void AddMSSMFullRun2Systematics(CombineHarvester & cb, bool highmass, bool DNNdi
   //    obj->set_attribute("njet","vbf");
   //});
   cb.cp().bin_id({6,10,12}).ForEachObj([&](ch::Object *obj){
+  //cb.cp().bin_id({6,10,13}).ForEachObj([&](ch::Object *obj){
       obj->set_attribute("njet","ggh");
+      //obj->set_attribute("njet","0j");
   });
   cb.cp().bin_id({7,11,13}).ForEachObj([&](ch::Object *obj){
+  //cb.cp().bin_id({7,11,14}).ForEachObj([&](ch::Object *obj){
       obj->set_attribute("njet","vbf");
+      //obj->set_attribute("njet","1j");
+  });
+  cb.cp().bin_id({8,12,15}).ForEachObj([&](ch::Object *obj){
+      obj->set_attribute("njet","2j");
   });
 
   cb.cp().channel({"em8","em8_dy","em8_top", "em7","em7_dy","em7_top", "em6","em6_dy","em6_top"}).ForEachObj([&](ch::Object *obj){
@@ -269,13 +276,13 @@ void AddMSSMFullRun2Systematics(CombineHarvester & cb, bool highmass, bool DNNdi
   // WW stuff
   // -----------------------
 
-  //cb.cp().process({"WW"}).bin_id({6}).attr({"dilep"},"analysis").AddSyst(cb, "CMS_hww_WWqscale_0j", "shape", SystMap<>::init(1.00));
-  //cb.cp().process({"WW"}).bin_id({7}).attr({"dilep"},"analysis").AddSyst(cb, "CMS_hww_WWqscale_1j", "shape", SystMap<>::init(1.00));
-  //cb.cp().process({"WW"}).bin_id({8}).attr({"dilep"},"analysis").AddSyst(cb, "CMS_hww_WWqscale_2j", "shape", SystMap<>::init(1.00));
+ // cb.cp().process({"WW"}).bin_id({6}).attr({"dilep"},"analysis").AddSyst(cb, "CMS_hww_WWqscale_0j", "shape", SystMap<>::init(1.00));
+//  cb.cp().process({"WW"}).bin_id({7}).attr({"dilep"},"analysis").AddSyst(cb, "CMS_hww_WWqscale_1j", "shape", SystMap<>::init(1.00));
+//  cb.cp().process({"WW"}).bin_id({8}).attr({"dilep"},"analysis").AddSyst(cb, "CMS_hww_WWqscale_2j", "shape", SystMap<>::init(1.00));
   //cb.cp().process({"WW"}).bin_id({9}).attr({"dilep"},"analysis").AddSyst(cb, "CMS_hww_WWqscale_vbf", "shape", SystMap<>::init(1.00));
-  //cb.cp().process({"WW"}).bin_id({6}).attr({"dilep"},"analysis").AddSyst(cb, "CMS_hww_WWresum_0j", "shape", SystMap<>::init(1.00));
-  //cb.cp().process({"WW"}).bin_id({7}).attr({"dilep"},"analysis").AddSyst(cb, "CMS_hww_WWresum_1j", "shape", SystMap<>::init(1.00));
-  //cb.cp().process({"WW"}).bin_id({8}).attr({"dilep"},"analysis").AddSyst(cb, "CMS_hww_WWresum_2j", "shape", SystMap<>::init(1.00));
+//  cb.cp().process({"WW"}).bin_id({6}).attr({"dilep"},"analysis").AddSyst(cb, "CMS_hww_WWresum_0j", "shape", SystMap<>::init(1.00));
+//  cb.cp().process({"WW"}).bin_id({7}).attr({"dilep"},"analysis").AddSyst(cb, "CMS_hww_WWresum_1j", "shape", SystMap<>::init(1.00));
+//  cb.cp().process({"WW"}).bin_id({8}).attr({"dilep"},"analysis").AddSyst(cb, "CMS_hww_WWresum_2j", "shape", SystMap<>::init(1.00));
   //cb.cp().process({"WW"}).bin_id({9}).attr({"dilep"},"analysis").AddSyst(cb, "CMS_hww_WWresum_vbf", "shape", SystMap<>::init(1.00));
   cb.cp().process({"WW"}).bin_id({6}).attr({"dilep"},"analysis").AddSyst(cb, "CMS_hww_WWqscale_ggh", "shape", SystMap<>::init(1.00));
   cb.cp().process({"WW"}).bin_id({7}).attr({"dilep"},"analysis").AddSyst(cb, "CMS_hww_WWqscale_vbf", "shape", SystMap<>::init(1.00));
@@ -470,7 +477,7 @@ void AddMSSMFullRun2Systematics(CombineHarvester & cb, bool highmass, bool DNNdi
   // -----------------------
 
   for(auto y : runyears){
-  //for(auto y2 : std::vector<std::string> {"0j", "1j", "2j", "vbf"}){
+//  for(auto y2 : std::vector<std::string> {"0j", "1j", "2j"}){
   for(auto y2 : std::vector<std::string> {"ggh", "vbf"}){
   for(auto y3 : std::vector<std::string> {"em", "ee", "mm"}){
     if(!highmass){
@@ -506,7 +513,7 @@ void AddMSSMFullRun2Systematics(CombineHarvester & cb, bool highmass, bool DNNdi
     }
   }
   for(int ibin=1; ibin<=maxbin; ibin++){
-    /*for(auto smass : sigmasses){
+/* for(auto smass : sigmasses){
       std::cout << "ibin"+mssmorindep+"GGH_"+smass+model+"_"+std::to_string(ibin)+"_stat" << std::endl;
 
       cb.cp().process(JoinStr({ggH, ggHSBI})).attr({"dilep"},"analysis").attr({"False"},"CR").AddSyst(cb,
@@ -547,7 +554,6 @@ void AddMSSMFullRun2Systematics(CombineHarvester & cb, bool highmass, bool DNNdi
      cb.cp().process(JoinStr({{"qqH_hww"}, qqHSBI})).attr({"dilep"},"analysis").attr({"False"},"CR").AddSyst(cb,
        "ibinqqH_hww_"+std::to_string(ibin)+"_stat", "shape", SystMap<>::init(1.00));
   }
-
 
 
 
